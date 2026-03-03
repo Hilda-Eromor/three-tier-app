@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  frontend:
+4    image: hilda123/frontend:v2
+    container_name: frontend
+    ports:
+      - "80:80"        # Expose frontend on port 80
+    restart: always
+
+  backend:
+    image: hilda123/backend:v2
+    container_name: backend
+    ports:
+      - "5000:5000"    # Expose backend on port 5000
+    restart: always
