@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  frontend:
+    image: hilda123/frontend:v2
+    container_name: frontend
+    restart: always
+    ports:
+      - "3000:80"
+
+  backend:
+    image: hilda123/backend:v2
+    container_name: backend
+    restart: always
+    ports:
+      - "5000:5000"
+
+  database:
+    image: postgres:15
+    container_name: database
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+
+
