@@ -1,16 +1,45 @@
-version: "3.8"
+name: CI/CD Pipeline
+  on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-services:
-  frontend:
-4    image: hilda123/frontend:v2
-    container_name: frontend
-    ports:
-      - "80:80"        # Expose frontend on port 80
-    restart: always
 
-  backend:
-    image: hilda123/backend:v2
-    container_name: backend
-    ports:
-      - "5000:5000"    # Expose backend on port 5000
-    restart: always
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout your code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Build and push frontend image
+      - name: Build and push frontend
+        uses: docker/build-push-action@v4
+        with:
+          context: ./frontend
+          push: true
+          tags: hilda123/frontend:v2
+
+      # Build and push backend image
+      - name: Build and push backend
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend
+          push: true
+          tags: hilda123/backend:v2
